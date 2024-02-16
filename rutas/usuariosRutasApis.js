@@ -1,7 +1,7 @@
 var rutas=require("express").Router();
 var subirArchivo=require("../middlewares/subirArchivo");
 const fs = require('fs');
-var {mostrarUsuario, nuevoUsuario, modificarUduario, buscarPorID, borrarUsuario}=require("../bd/usuariosbd");
+var {mostrarUsuario, nuevoUsuario, modificarUsuario, buscarPorID, borrarUsuario}=require("../bd/usuariosbd");
 
 rutas.get("/api/motrarUsuarios",async(req, res)=>{
     var usuarios = await mostrarUsuario();
@@ -41,7 +41,7 @@ rutas.post("/api/editarUsuario",subirArchivo(),async(req,res)=>{
         }
     }
     req.body.foto=req.file.originalname;
-    var error=await modificarUduario(req.body);
+    var error=await modificarUsuario(req.body);
     if(error==0)
         res.status(200).json("El usuario fue modificado");
     else 

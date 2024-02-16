@@ -1,5 +1,5 @@
 var rutas=require("express").Router();
-var {mostrarUsuario, nuevoUsuario, modificarUduario, buscarPorID, borrarUsuario, login}=require("../bd/usuariosbd");
+var {mostrarUsuario, nuevoUsuario, modificarUsuario, buscarPorID, borrarUsuario, login}=require("../bd/usuariosbd");
 var subirArchivo=require("../middlewares/subirArchivo");
 const fs = require('fs');
 
@@ -56,7 +56,7 @@ rutas.post("/editar",subirArchivo(), async(req,res)=>{
     } else{
         req.body.foto=req.body.fotoVieja;
     }
-    var error=await modificarUduario(req.body);
+    var error=await modificarUsuario(req.body);
     res.redirect("/mostrar"); 
 });
 
