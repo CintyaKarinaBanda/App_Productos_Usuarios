@@ -82,27 +82,33 @@ async function nuevoUsuario(datos){
     return error;
 }
 
-async function modificarUduario(datos){
+async function modificarUsuario(datos){
     var error=1;
-    var resBuscar = await buscarPorID(datos.id);
-    if(resBuscar!=undefined){
+    var respuestaBuscar=await buscarPorID(datos.id);
+    console.log(respuestaBuscar);
+    if(respuestaBuscar!=undefined){
+        if(datos.foto=="algo"){
+            datos.foto=respuestaBuscar.foto;
+        }
+        datos.admin=respuestaBuscar.admin;
         if(datos.password==""){
             datos.password=datos.passwordViejo;
-            datos.salt=datos.saltViejo
-        } else{
+            datos.salt=datos.saltViejo;
+        }
+        else{
             var {salt, hash}=encriptarPassword(datos.password);
             datos.password=hash;
             datos.salt=salt;
         }
-
         var user=new Usuario(datos.id,datos);
-        if (user.bandera==0) {
-            try {
+        if (user.bandera==0){
+            try{
                 await conexion.doc(user.id).set(user.obtenerDatos);
-                console.log("Registro modificado");
+                console.log("Usuario actualizado ");
                 error=0;
-            } catch (err) {
-                console.log("Error la modificar el usuario "+err);
+            }
+            catch(err){
+                console.log("Error al modificar al usuario "+err);
             }
         }
     }
@@ -128,7 +134,7 @@ module.exports = {
     mostrarUsuario,
     buscarPorID,
     nuevoUsuario,
-    modificarUduario,
+    modificarUsuario,
     borrarUsuario,
     login
   };

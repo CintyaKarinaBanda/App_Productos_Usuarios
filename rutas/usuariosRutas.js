@@ -38,15 +38,14 @@ rutas.post("/nuevoUsuario",subirArchivo(), async(req,res)=>{
 });
 
 rutas.get("/editar/:id",async(req,res)=>{
-    if(req.session.usuario){
+
         var user=await buscarPorID(req.params.id);
         res.render("usuarios/modificar",{user});
-    } else{
-        res.redirect("/");
-    }
+
 });
 
 rutas.post("/editar",subirArchivo(), async(req,res)=>{
+    console.log(req.body);
     if(req.file!=undefined){
         req.body.foto=req.file.originalname;
         try {
@@ -58,7 +57,7 @@ rutas.post("/editar",subirArchivo(), async(req,res)=>{
         req.body.foto=req.body.fotoVieja;
     }
     var error=await modificarUduario(req.body);
-    res.redirect("/"); 
+    res.redirect("/mostrar"); 
 });
 
 rutas.get("/borrar/:id", async (req, res) => {
@@ -69,7 +68,7 @@ rutas.get("/borrar/:id", async (req, res) => {
     } catch (error) {
         console.error("Error al borrar la foto o usuario:", error); 
     }
-    res.redirect("/");
+    res.redirect("/mostrar");
 });
 
 rutas.get("/logout",(req,res)=>{
