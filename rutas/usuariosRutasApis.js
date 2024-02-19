@@ -31,22 +31,21 @@ rutas.get("/api/buscarUsuarioPorId/:id",async(req,res)=>{
         res.status(200).json(user);
 });
 
-rutas.post("/api/editarUsuario",subirArchivo(),async(req,res)=>{
-    var user= await buscarPorID(req.body.id);
-    if (user.foto!=req.file.originalname) {
-        try {
-            fs.unlinkSync(`web/images/${user.foto}`);
-        } catch (error) {
-            console.error("Error al borrar la foto o usuario:", error);
-        }
+rutas.post("/api/editarUsuario", subirArchivo(),async(req,res)=>{
+    if (req.file!=undefined){
+        req.body.foto=req.file.originalname;
     }
-    req.body.foto=req.file.originalname;
-    var error=await modificarUsuario(req.body);
-    if(error==0)
-        res.status(200).json("El usuario fue modificado");
-    else 
-        res.status(400).json("Error al actualizar el usuario");
+    else{
+        req.body.foto="algo"
+    }
 
+    var error=await modificarUsuario(req.body);
+    if(error==0){
+        res.status(200).json("Usuario actualizado");
+    }
+    else{
+        res.status(400).json("Error al actualizar el usuario");
+    }
 });
 
 rutas.get("/api/borrarUsuario/:id",async(req,res)=>{

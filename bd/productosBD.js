@@ -1,5 +1,6 @@
 var conexionPro = require("./conexion").conexionPro;
 var Producto = require("../modelos/Productos");
+const fs = require('fs');
 
 async function mostrarProducto() {
     var products = [];
@@ -51,6 +52,11 @@ async function modificarProducto(datos){
     var error=1;
     var resBuscar = await buscarPorID(datos.id);
     if(resBuscar!=undefined){
+        if(datos.foto=="algo"){
+            datos.foto=resBuscar.foto;
+        } else{
+            fs.unlinkSync(`web/images/${resBuscar.foto}`);
+        }
         var product=new Producto(datos.id,datos);
         if (product.bandera==0) {
             try {

@@ -21,7 +21,7 @@ rutasP.get("/api/buscarProductoPorId/:id",async(req,res)=>{
         res.status(200).json(user);
 });
 
-rutasP.post("/api/nuevoProductos", subirArchivo(), async(req,res)=>{
+rutasP.post("/api/nuevoProducto", subirArchivo(), async(req,res)=>{
     req.body.foto=req.file.originalname;
     var errorProductos = await nuevoProducto(req.body);
     //res.redirect("/productos");
@@ -32,17 +32,13 @@ rutasP.post("/api/nuevoProductos", subirArchivo(), async(req,res)=>{
 });
 
 rutasP.post("/api/editarProductos",subirArchivo(),async(req,res)=>{
-    var user= await buscarPorID(req.body.id);
-    if (user.foto!=req.file.originalname) {
-        try {
-            fs.unlinkSync(`web/images/${user.foto}`);
-        } catch (error) {
-            console.error("Error al borrar la foto o usuario:", error);
-        }
+    if (req.file!=undefined){
+        req.body.foto=req.file.originalname;
     }
-    req.body.foto=req.file.originalname;
+    else{
+        req.body.foto="algo"
+    }
     var errorProducto=await modificarProducto(req.body);
-    //res.redirect("/productos");
     if(errorProducto==0)
         res.status(200).json("Producto Modificado");
     else

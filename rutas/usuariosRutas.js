@@ -44,20 +44,15 @@ rutas.get("/editar/:id",async(req,res)=>{
 
 });
 
-rutas.post("/editar",subirArchivo(), async(req,res)=>{
-    console.log(req.body);
+rutas.post("/editar", subirArchivo(),async(req,res)=>{
     if(req.file!=undefined){
         req.body.foto=req.file.originalname;
-        try {
-            fs.unlinkSync(`web/images/${req.body.fotoVieja}`);
-        } catch (error) {
-            console.error("Error al borrar la foto o usuario:", error);
-        }
-    } else{
+    }
+    else{
         req.body.foto=req.body.fotoVieja;
     }
     var error=await modificarUsuario(req.body);
-    res.redirect("/mostrar"); 
+    res.redirect("/mostrarUsuarios");
 });
 
 rutas.get("/borrar/:id", async (req, res) => {

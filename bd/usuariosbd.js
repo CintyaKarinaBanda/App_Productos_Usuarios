@@ -1,6 +1,7 @@
 var conexion = require("./conexion").conexion;
 var Usuario = require("../modelos/Usuarios");
 var {encriptarPassword, validarPassword}= require("../middlewares/funcionesPassword");
+const fs = require('fs');
 
 
 async function mostrarUsuario() {
@@ -89,6 +90,8 @@ async function modificarUsuario(datos){
     if(respuestaBuscar!=undefined){
         if(datos.foto=="algo"){
             datos.foto=respuestaBuscar.foto;
+        } else{
+            fs.unlinkSync(`web/images/${respuestaBuscar.foto}`);
         }
         datos.admin=respuestaBuscar.admin;
         if(datos.password==""){
